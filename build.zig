@@ -169,9 +169,9 @@ pub fn build(b: *std.Build) !void {
         if (prefer_prebundled_headers orelse !use_system_x11_headers) {
             glfw.root_module.addIncludePath(b.path(b.pathJoin(&.{ "deps", x11_header_subdir })));
             if (install_dependency_headers) {
-                try b.getInstallStep().addError(
+                b.getInstallStep().dependOn(&b.addFail(
                     \\Using '-Donly-install-dependency-headers' without '-Dprefer-bundled-headers=false' would cause the pre-bundled header to be reinstalled.
-                , .{});
+                ).step);
             }
         } else {
             for ([_][]const u8{
@@ -191,7 +191,7 @@ pub fn build(b: *std.Build) !void {
                     else
                         std.mem.trimStart(u8, name, "lib");
                     const include_dirs = collectPkgConfigIncludeDirs(b, pkg_name) catch |err| {
-                        glfw.step.addError("failed to resolve '{s}' package: {}", .{ pkg_name, err }) catch @panic("OOM");
+                        glfw.step.dependOn(&b.addFail(b.fmt("failed to resolve '{s}' package: {}", .{ pkg_name, err })).step);
                         continue;
                     };
                     for (include_dirs) |include_dir| {
@@ -249,9 +249,9 @@ pub fn build(b: *std.Build) !void {
         if (prefer_prebundled_headers orelse !use_system_wayland_scanner) {
             glfw.root_module.addIncludePath(b.path(b.pathJoin(&.{ "deps", wayland_protocols_header_subdir })));
             if (install_dependency_headers) {
-                try b.getInstallStep().addError(
+                b.getInstallStep().dependOn(&b.addFail(
                     \\Using '-Donly-install-dependency-headers' without '-Dprefer-bundled-headers=false' would cause the pre-bundled header to be reinstalled.
-                , .{});
+                ).step);
             }
         } else {
             const host_wayland = if (!use_system_wayland_scanner)
@@ -311,9 +311,9 @@ pub fn build(b: *std.Build) !void {
         if (prefer_prebundled_headers orelse !use_system_wayland_headers) {
             glfw.root_module.addIncludePath(b.path(b.pathJoin(&.{ "deps", wayland_header_subdir })));
             if (install_dependency_headers) {
-                try b.getInstallStep().addError(
+                b.getInstallStep().dependOn(&b.addFail(
                     \\Using '-Donly-install-dependency-headers' without '-Dprefer-bundled-headers=false' would cause the pre-bundled header to be reinstalled.
-                , .{});
+                ).step);
             }
         } else {
             for ([_][]const u8{
@@ -323,7 +323,7 @@ pub fn build(b: *std.Build) !void {
             }) |name| {
                 if (use_system_wayland_headers) {
                     const include_dirs = collectPkgConfigIncludeDirs(b, name) catch |err| {
-                        glfw.step.addError("failed to resolve '{s}' package: {}", .{ name, err }) catch @panic("OOM");
+                        glfw.step.dependOn(&b.addFail(b.fmt("failed to resolve '{s}' package: {}", .{ name, err })).step);
                         continue;
                     };
                     for (include_dirs) |include_dir| {
@@ -352,14 +352,14 @@ pub fn build(b: *std.Build) !void {
         if (prefer_prebundled_headers orelse !use_system_libxkbcommon_headers) {
             glfw.root_module.addIncludePath(b.path(b.pathJoin(&.{ "deps", libxkbcommon_header_subdir })));
             if (install_dependency_headers) {
-                try b.getInstallStep().addError(
+                b.getInstallStep().dependOn(&b.addFail(
                     \\Using '-Donly-install-dependency-headers' without '-Dprefer-bundled-headers=false' would cause the pre-bundled header to be reinstalled.
-                , .{});
+                ).step);
             }
         } else {
             if (use_system_libxkbcommon_headers) blk: {
                 const include_dirs = collectPkgConfigIncludeDirs(b, "xkbcommon") catch |err| {
-                    glfw.step.addError("failed to resolve '{s}' package: {}", .{ "xkbcommon", err }) catch @panic("OOM");
+                    glfw.step.dependOn(&b.addFail(b.fmt("failed to resolve '{s}' package: {}", .{ "xkbcommon", err })).step);
                     break :blk;
                 };
                 for (include_dirs) |include_dir| {
