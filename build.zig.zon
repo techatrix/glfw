@@ -24,8 +24,8 @@
             .lazy = true,
         },
         .libxkbcommon = .{
-            .url = "git+https://github.com/xkbcommon/libxkbcommon.git?ref=xkbcommon-1.11.0#0f9cefb1fedb23433666fa5d9045e48ff030c006",
-            .hash = "N-V-__8AAFRAZAD02nId1w02lyWXmN-hvo873BSh9wZDxjSN",
+            .url = "git+https://github.com/xkbcommon/libxkbcommon.git?ref=xkbcommon-1.13.2#d1442aaa6b635551182e83c3b55037f4c118c962",
+            .hash = "N-V-__8AAGh7bAAD9LH6Hh6HB6br9SDZmRBbRu-_1NNpQ4GL",
             .lazy = true,
         },
         .xorgproto = .{
